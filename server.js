@@ -51,10 +51,13 @@ if (mongoURL == null) {
 }
 
 
-mongoose.connect(mongoURL);
-mongoose.Promise = Promise;
-var db = mongoose.connection;
-
+mongoose.connect(mongoURL, {
+  useNewUrlParser: true
+});
+const connection = mongoose.connection;
+connection.once('open', function(){
+  console.log("Database connection ok.");
+})
 // api route
 app.use('/api/mblogs', require('./api/mblogs'));
 
