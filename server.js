@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+var Promise = require('bluebird');
 
 const app = express();
 
@@ -50,20 +51,15 @@ if (mongoURL == null) {
 }
 
 
-mongoose.connect(mongoURL, {
-    useNewUrlParser: true 
-});
-const connection = mongoose.connection;
-connection.once('open', function() {
-    console.log("MONGODB database connection ok.");
-})
-
+mongoose.connect(mongoURL);
+mongoose.Promise = Promise;
+var db = mongoose.connection;
 
 // api route
 app.use('/api/mblogs', require('./api/mblogs'));
 
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
 app.listen(port, function(){
     console.log("server port: " + port);
 });
